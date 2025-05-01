@@ -34,10 +34,10 @@ const clockSettings = (unit: number) => ({
 })
 
 export function Clock() {
-    const { unit: baseUnit, settings, updateSettings } = useOutletContext<OutletContext<ReturnType<typeof clockSettings>>>();
+    const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<ReturnType<typeof clockSettings>>>();
     const [time, updateTime] = useState(new Date());
 
-    const unit = baseUnit * (window.innerHeight < window.innerWidth ? 1 / 4 : 2 / 5);
+    const unit = Math.min(windowSize.width, windowSize.height) * (window.innerHeight < window.innerWidth ? 1 / 4 : 2 / 5);
     const defaultSettings = clockSettings(unit);
 
     const timeout = setTimeout(() => updateTime(new Date()), 1000);
@@ -62,8 +62,8 @@ export function Clock() {
     return (
         <>
             <Layer
-                x={window.innerWidth / 2}
-                y={window.innerHeight / 2}
+                x={windowSize.width / 2}
+                y={windowSize.height / 2}
                 rotation={angle}
             >
                 {(
@@ -92,8 +92,8 @@ export function Clock() {
                     width={second_hand.width}
                     height={second_hand.height}
                     fill={second_hand.color}
-                    x={-second_hand.width / 2}
-                    y={- unit * 180 / 200}
+                    offsetX={second_hand.width / 2}
+                    offsetY={unit * 180 / 200}
                 />
             </Layer>
             <Layer
@@ -105,16 +105,16 @@ export function Clock() {
                     width={minute_hand.width}
                     height={minute_hand.height}
                     fill={minute_hand.color}
-                    offsetY={unit * 20 / 200}
                     offsetX={minute_hand.width / 2}
+                    offsetY={unit * 20 / 200}
                     rotation={time.getMinutes() * 6 + 180}
                 />
                 <Rect
                     width={hour_hand.width}
                     height={hour_hand.height}
                     fill={hour_hand.color}
-                    offsetY={unit * 80 / 200}
                     offsetX={hour_hand.width / 2}
+                    offsetY={unit * 20 / 200}
                     rotation={(time.getHours() + (time.getMinutes() + 1) / 60) % 12 * 30}
                 />
                 <Circle x={0} y={0} fill={center.color} radius={center.radius} />

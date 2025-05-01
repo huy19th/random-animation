@@ -1,7 +1,7 @@
 import { SetState } from './react'
 
 export type OutletContext<T> = {
-    settings: T
+    settings: T,
     updateSettings: SetState<T>,
-    unit: number
+    windowSize: {width: number, height: number},
 }
