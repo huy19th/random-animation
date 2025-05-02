@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, OutlinedInput, Tooltip, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, Tooltip, TextField } from '@mui/material';
 import { CloseRounded, SearchRounded } from '@mui/icons-material';
 import { routes } from '../../common/constants';
 import { useLocation } from 'react-router';
@@ -12,6 +12,7 @@ export function NavDialog(
     const location = useLocation();
     const path = location.pathname.replace('/', '')
     const navigate = useNavigate()
+    console.log(path)
 
     useEffect(handleClose, [location])
 
@@ -44,7 +45,7 @@ export function NavDialog(
                     {routes.map(item =>
                         <Button
                             key={item.path as string}
-                            variant={path === item.path ? 'contained' : 'text'}
+                            variant={path === item.path || (!path && item.path === 'clock')? 'contained' : 'text'}
                             onClick={() => navigate(item.path as string)}
                         >
                             <Tooltip title={(item.path as string).replace('-', ' ')}>

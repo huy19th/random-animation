@@ -1,44 +1,17 @@
 import { Circle, Layer, Text, Rect } from 'react-konva'
 import { useOutletContext } from 'react-router'
 import { OutletContext } from '../../common/types/outlet-context'
-import { Color } from '../../common/constants';
 import { sameKeys } from '../../common/utils';
 import { useEffect, useState } from 'react';
-
-const clockSettings = (unit: number) => ({
-    second_hand: {
-        color: Color.Neutral[500],
-        width: unit / 40,
-        height: unit,
-    },
-    minute_hand: {
-        color: Color.Neutral[600],
-        width: unit / 25,
-        height: unit * 3 / 4,
-    },
-    hour_hand: {
-        color: Color.Neutral[800],
-        width: unit / 20,
-        height: unit / 2,
-    },
-    center: {
-        color: Color.Neutral[900],
-        radius: unit / 20,
-    },
-    numbers: {
-        roman: true,
-        color: Color.Neutral[900],
-        size: unit / 5,
-        distance: unit,
-    }
-})
+import { ClockSettings } from './settings';
 
 export function Clock() {
-    const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<ReturnType<typeof clockSettings>>>();
+    console.log('Clock')
+    const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<ReturnType<typeof ClockSettings>>>();
     const [time, updateTime] = useState(new Date());
 
     const unit = Math.min(windowSize.width, windowSize.height) * (window.innerHeight < window.innerWidth ? 1 / 4 : 2 / 5);
-    const defaultSettings = clockSettings(unit);
+    const defaultSettings = ClockSettings(unit);
 
     const timeout = setTimeout(() => updateTime(new Date()), 1000);
 

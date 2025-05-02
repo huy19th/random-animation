@@ -1,43 +1,27 @@
 import { Layer, Image as Img, Rect } from 'react-konva';
-import { Color } from '../../common/constants';
 import { OutletContext } from '../../common/types';
 import { useOutletContext } from 'react-router';
 import { useEffect, useRef, useState } from 'react';
 import { sameKeys } from '../../common/utils';
-import { Petal } from './petal';
+import { Petal } from './animation';
 import Sakura from './petal.png';
-
-const defaultSettings = {
-  background: {
-    color: Color.Neutral[800],
-  },
-  petal: {
-    count: 50,
-  },
-};
+import { useImage } from '../../common/hooks';
+import { CherryBlossommSettings } from './settings';
 
 export function CherryBlossom() {
   const { windowSize, settings, updateSettings } = useOutletContext<
-    OutletContext<typeof defaultSettings>
+    OutletContext<typeof CherryBlossommSettings>
   >();
-
-  const [petalImage, setPetalImage] = useState<HTMLImageElement | null>(null);
-  const [petals, setPetals] = useState<Petal[]>([]);
   const animationRef = useRef<number>(null);
+  const petalImage = useImage(Sakura)
+  const [petals, setPetals] = useState<Petal[]>([]);
 
-  // Load the petal image and initialize settings
-  useEffect(() => {
-    updateSettings(defaultSettings);
-
-    const img = new Image();
-    img.src = Sakura;
-    img.onload = () => setPetalImage(img);
-  }, []);
+  // initialize settings
+  useEffect(() => updateSettings(CherryBlossommSettings), []);
 
   // Regenerate petals when petal image or count changes
   useEffect(() => {
-    if (!petalImage || !sameKeys(settings, defaultSettings)) return;
-
+    if (!petalImage || !sameKeys(settings, CherryBlossommSettings)) return;
     setPetals(
       new Array(settings.petal.count).fill(null).map(() => new Petal())
     );
@@ -59,7 +43,7 @@ export function CherryBlossom() {
     return () => cancelAnimationFrame(animationRef.current!);
   }, [petals.length]); // run once when petals are initialized
 
-  if (!sameKeys(settings, defaultSettings) || !petalImage) return null;
+  if (!sameKeys(settings, CherryBlossommSettings) || !petalImage) return null;
 
   return (
     <Layer>
