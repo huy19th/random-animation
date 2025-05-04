@@ -8,7 +8,7 @@ export function BrickWallIcon(props: SvgIconOwnProps) {
                 preserveAspectRatio="xMidYMid meet">
 
                 <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
-                    fill="#000000" stroke="none">
+                    fill="currentColor" stroke="none">
                     <path d="M7 634 c-11 -11 -8 -54 3 -54 6 0 10 9 10 20 0 18 7 20 55 20 l55 0
                     0 -55 0 -55 -55 0 c-48 0 -55 2 -55 20 0 11 -5 20 -11 20 -6 0 -9 -12 -7 -27
                     3 -28 4 -28 73 -28 l70 0 0 70 0 70 -65 3 c-36 2 -69 0 -73 -4z"/>

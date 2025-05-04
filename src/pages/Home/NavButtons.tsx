@@ -1,31 +1,46 @@
-import { Fab, Stack, useMediaQuery } from '@mui/material';
-import { MenuRounded, FullscreenRounded, SettingsRounded, FullscreenExitRounded } from '@mui/icons-material';
+import { Fab, Fade, Stack, SvgIcon } from '@mui/material';
+import { MenuRounded, FullscreenRounded, FullscreenExitRounded, SettingsOutlined } from '@mui/icons-material';
 import { FullScreenHandle } from 'react-full-screen';
+import { useIdle } from 'react-use';
 
 export function NavButtons(
     { handleFullSreen, handleOpenNav, handleOpenSettings }:
         { handleFullSreen: FullScreenHandle, handleOpenNav: () => any, handleOpenSettings: () => any }
 ) {
-    useMediaQuery
+    const isIdle = useIdle(10000); // is true after 10s inacctive
+
+    const buttons: [typeof SvgIcon, () => any][] = [
+        [MenuRounded, handleOpenNav],
+        [
+            handleFullSreen.active ? FullscreenExitRounded : FullscreenRounded,
+            () => handleFullSreen.active ? handleFullSreen.exit() : handleFullSreen.enter()
+        ],
+        [SettingsOutlined, handleOpenSettings]
+    ]
+
     return (
-        <Stack
-            position={'absolute'}
-            justifyContent={'center'}
-            display={'flex'}
-            width={'100%'}
-            direction='row'
-            spacing={1}
-            top={8}
-        >
-            <Fab size='small' onClick={handleOpenNav}>
-                <MenuRounded />
-            </Fab>
-            <Fab size='small' onClick={() => handleFullSreen.active ? handleFullSreen.exit() : handleFullSreen.enter()}>
-                {handleFullSreen.active ? <FullscreenExitRounded /> : <FullscreenRounded />}
-            </Fab>
-            <Fab size='small' onClick={handleOpenSettings}>
-                <SettingsRounded />
-            </Fab>
-        </Stack>
+        <Fade in={!isIdle}>
+            <Stack
+                position={'absolute'}
+                zIndex={100}
+                justifyContent={'center'}
+                display={'flex'}
+                width={'100%'}
+                direction='row'
+                spacing={1}
+                top={8}
+            >
+                {buttons.map(([Icon, handleClick], index) =>
+                    <Fab
+                        key={index}
+                        size='small'
+                        variant='outlined'
+                        onClick={handleClick}
+                    >
+                        <Icon />
+                    </Fab>
+                )}
+            </Stack>
+        </Fade>
     )
 }

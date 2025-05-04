@@ -1,14 +1,14 @@
 import { ScheduleRounded } from '@mui/icons-material';
+import { SvgIcon } from '@mui/material';
+import { JSX } from 'react';
 import { Clock } from '../../pages/Clock'
-import { CherryBlossomIcon } from '../icons';
+import { CherryBlossomIcon, BrickWallIcon } from '../icons';
 import { CherryBlossom } from '../../pages/CherryBlossom';
 import { BrickBreaker } from '../../pages/BrickBreaker';
-import { BrickWallIcon } from '../icons/BrickWall';
-import { JSX } from 'react';
 
-export const routes = [
+export const routes: { path: string, element: JSX.Element, icon: JSX.Element }[] = ([
     ['clock', <Clock />, ScheduleRounded],
     ['cherry-blossom', <CherryBlossom />, CherryBlossomIcon],
     ['brick-breaker', <BrickBreaker />, BrickWallIcon]
-].map(([path, element, Icon]) => // @ts-ignore
-    ({ path, element, icon: <Icon fontSize='large' /> })) as Array<{ path: string, element: JSX.Element, icon: JSX.Element }>
+] as [string, JSX.Element, typeof SvgIcon][]).map(([path, element, Icon]) =>
+    ({ path, element, icon: <Icon fontSize='large' sx={{ position: 'relative', bottom: 6 }} /> }))

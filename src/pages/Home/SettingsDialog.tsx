@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, TextField } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 import { SetState } from '../../common/types';
 import { GroupSettings, Switch } from '../../common/components';
@@ -16,7 +16,6 @@ export function SettingsDialog(
     const handleChange = (e: any) => {
         const { name, value, type } = e.target;
         const [setting, subSetting] = name.split('.');
-        console.log(formData, type)
 
         updateFormData({
             ...formData,
@@ -58,6 +57,7 @@ export function SettingsDialog(
             >
                 <CloseRounded />
             </IconButton>
+            <Divider/>
             <DialogContent>
                 {
                     sameKeys(formData, settings) && Object.keys(formData).map(setting => {

@@ -1,8 +1,7 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, Tooltip, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { CloseRounded, SearchRounded } from '@mui/icons-material';
 import { routes } from '../../common/constants';
-import { useLocation } from 'react-router';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { JSX, useEffect } from 'react';
 
 export function NavDialog(
@@ -10,11 +9,10 @@ export function NavDialog(
         { open: boolean, handleClose: () => any }
 ) {
     const location = useLocation();
-    const path = location.pathname.replace('/', '')
-    const navigate = useNavigate()
-    console.log(path)
+    const path = location.pathname.replace('/', '');
+    const navigate = useNavigate();
 
-    useEffect(handleClose, [location])
+    useEffect(handleClose, [location]);
 
     return (
         <Dialog
@@ -45,12 +43,20 @@ export function NavDialog(
                     {routes.map(item =>
                         <Button
                             key={item.path as string}
-                            variant={path === item.path || (!path && item.path === 'clock')? 'contained' : 'text'}
+                            variant={path === item.path || (!path && item.path === 'clock') ? 'contained' : 'text'}
+                            sx={{
+                                width: '8rem',
+                                height: '8rem',
+                                flexDirection: 'column',
+                                textTransform: 'capitalize',
+                                wordBreak: 'break',
+                            }}
                             onClick={() => navigate(item.path as string)}
                         >
-                            <Tooltip title={(item.path as string).replace('-', ' ')}>
-                                {item.icon as JSX.Element}
-                            </Tooltip>
+                            {item.icon as JSX.Element}
+                            <Typography sx={{ position: 'absolute', bottom: 6 }} fontSize={14}>
+                                {(item.path as string).replace('-', ' ')}
+                            </Typography>
                         </Button>
                     )}
                 </Box>
