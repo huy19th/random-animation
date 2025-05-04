@@ -1,12 +1,12 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogProps, DialogTitle, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { CloseRounded, SearchRounded } from '@mui/icons-material';
 import { routes } from '../../common/constants';
 import { useLocation, useNavigate } from 'react-router';
 import { JSX, useEffect } from 'react';
 
 export function NavDialog(
-    { open, handleClose }:
-        { open: boolean, handleClose: () => any }
+    { open, handleClose, ...dialogProps }:
+        { open: boolean, handleClose: () => any } & DialogProps
 ) {
     const location = useLocation();
     const path = location.pathname.replace('/', '');
@@ -16,8 +16,11 @@ export function NavDialog(
 
     return (
         <Dialog
-            open={open} onClose={handleClose}
-            maxWidth='sm' fullWidth
+            maxWidth='sm'
+            fullWidth
+            {...dialogProps}
+            open={open}
+            onClose={handleClose}
         >
             <DialogTitle align='center'>Animations</DialogTitle>
             <IconButton

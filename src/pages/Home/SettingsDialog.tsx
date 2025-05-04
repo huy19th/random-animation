@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Divider, Grid, IconButton, TextField } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 import { SetState } from '../../common/types';
 import { GroupSettings, Switch } from '../../common/components';
@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { inputType, inputValue, sameKeys } from '../../common/utils';
 
 export function SettingsDialog(
-    { settings, updateSettings, open, handleClose }:
-        { settings: Record<string, any>, updateSettings: SetState<Record<string, any>>, open: boolean, handleClose: () => any }
+    { settings, updateSettings, open, handleClose, ...dialogProps }:
+        { settings: Record<string, any>, updateSettings: SetState<Record<string, any>>, open: boolean, handleClose: () => any } & DialogProps
 ) {
     const [formData, updateFormData] = useState<Record<string, any>>({});
     const baseSettings = useMemo(() => settings, [Object.keys(settings).join()])
@@ -45,7 +45,7 @@ export function SettingsDialog(
     }
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog {...dialogProps} open={open} onClose={handleClose}>
             <DialogTitle align='center'>Settings</DialogTitle>
             <IconButton
                 onClick={handleClose}
@@ -57,7 +57,7 @@ export function SettingsDialog(
             >
                 <CloseRounded />
             </IconButton>
-            <Divider/>
+            <Divider />
             <DialogContent>
                 {
                     sameKeys(formData, settings) && Object.keys(formData).map(setting => {

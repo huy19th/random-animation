@@ -1,13 +1,16 @@
 import { Stage } from 'react-konva';
 import { Outlet } from 'react-router';
 import { NavButtons } from './NavButtons';
-import { useLayoutEffect, useState } from 'react';
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import { RefObject, useLayoutEffect, useRef, useState } from 'react';
+import { useFullscreen, useToggle } from 'react-use';
 import { SettingsDialog } from './SettingsDialog';
 import { NavDialog } from './NavDiaglog';
+import { Box } from '@mui/material';
 
 export function Home() {
-    const fullScreenHandle = useFullScreenHandle();
+    const ref = useRef(null) as unknown as RefObject<Element>
+    const [show, toggle] = useToggle(false);
+    const isFullscreen = useFullscreen(ref, show, { onClose: () => toggle(false) });
     const [isNavOpen, setOpenNav] = useState<boolean>(false);
     const [isSettingsOpen, setOpenSettings] = useState<boolean>(false);
     const [settings, updateSettings] = useState<Record<string, any>>({});
@@ -20,17 +23,20 @@ export function Home() {
     }, [])
 
     return (
-        <FullScreen handle={fullScreenHandle}>
+        <Box ref={ref} bgcolor='white'>
             <NavButtons
-                handleFullSreen={fullScreenHandle}
+                isFullScreen={isFullscreen}
+                handleFullSreen={() => toggle(!isFullscreen)}
                 handleOpenNav={() => setOpenNav(true)}
                 handleOpenSettings={() => setOpenSettings(true)}
             />
             <NavDialog
+                container={ref.current}
                 open={isNavOpen}
                 handleClose={() => setOpenNav(false)}
             />
             <SettingsDialog
+                container={ref.current}
                 settings={settings}
                 updateSettings={updateSettings}
                 open={isSettingsOpen}
@@ -39,6 +45,6 @@ export function Home() {
             <Stage width={windowSize.width} height={windowSize.height}>
                 <Outlet context={{ windowSize, settings, updateSettings }} />
             </Stage>
-        </FullScreen>
+        </Box>
     )
 }
