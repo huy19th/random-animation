@@ -3,7 +3,7 @@ import { CloseRounded } from '@mui/icons-material';
 import { SetState } from '../../common/types';
 import { GroupSettings, Switch } from '../../common/components';
 import { useEffect, useMemo, useState } from 'react';
-import { inputType, inputValue, sameKeys } from '../../common/utils';
+import { inputType, inputValue } from '../../common/utils';
 
 export function SettingsDialog(
     { settings, updateSettings, open, handleClose, ...dialogProps }:
