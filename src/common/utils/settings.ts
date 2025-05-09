@@ -15,6 +15,6 @@ export class Settings<T extends z.Schema> {
         else Settings.settings.set(name, true)
         this.name = name
         this.schema = schema
-        this.value = schema.parse(null)
+        this.value = schema.parse(undefined)
     }
 }

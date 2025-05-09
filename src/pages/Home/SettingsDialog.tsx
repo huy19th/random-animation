@@ -4,15 +4,16 @@ import { SetState } from '../../common/types';
 import { GroupSettings, Switch } from '../../common/components';
 import { useEffect, useMemo, useState } from 'react';
 import { inputType, inputValue } from '../../common/utils';
+import { Settings } from '../../common/utils/settings';
 
 export function SettingsDialog(
     { settings, updateSettings, open, handleClose, ...dialogProps }:
-        { settings: Record<string, any>, updateSettings: SetState<Record<string, any>>, open: boolean, handleClose: () => any } & DialogProps
+        { settings: Settings<any>, updateSettings: SetState<Settings<any>>, open: boolean, handleClose: () => any } & DialogProps
 ) {
     const [formData, updateFormData] = useState<Record<string, any>>({});
-    const baseSettings = useMemo(() => settings, [Object.keys(settings).join()])
-    useEffect(() => updateFormData(settings), [settings])
-
+    const currentSettings = useMemo(() => settings, [settings.name]);
+    useEffect(() => updateFormData(settings.value), [settings.name]);
+    
     const handleChange = (e: any) => {
         const { name, value, type } = e.target;
         const [setting, subSetting] = name.split('.');
@@ -40,9 +41,15 @@ export function SettingsDialog(
     }
 
     const handleClick = () => {
-        updateSettings(formData);
+        updateSettings({ ...settings, value: formData });
         handleClose();
     }
+
+    if (
+        !formData ||
+        !settings?.value ||
+        Object.keys(settings.value).join() !== Object.keys(formData).join()
+    ) return null;
 
     return (
         <Dialog {...dialogProps} open={open} onClose={handleClose}>
@@ -60,7 +67,7 @@ export function SettingsDialog(
             <Divider />
             <DialogContent>
                 {
-                    sameKeys(formData, settings) && Object.keys(formData).map(setting => {
+                    Object.keys(formData).map(setting => {
                         const settingCount = Object.keys(formData[setting]).length;
                         let size: number
 
@@ -93,7 +100,7 @@ export function SettingsDialog(
                                                                     fullWidth
                                                                     size='small'
                                                                     variant='outlined'
-                                                                    type={inputType(baseSettings[setting][subSetting])}
+                                                                    type={inputType(currentSettings.value[setting][subSetting])}
                                                                     label={subSetting}
                                                                     name={fieldName}
                                                                     onChange={handleChange}
