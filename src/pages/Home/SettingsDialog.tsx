@@ -64,7 +64,12 @@ export function SettingsDialog(
     ) return null;
 
     return (
-        <Dialog {...dialogProps} open={open} onClose={handleClose}>
+        <Dialog
+            {...dialogProps}
+            maxWidth='sm'
+            open={open}
+            onClose={handleClose}
+        >
             <DialogTitle align='center'>Settings</DialogTitle>
             <IconButton
                 onClick={handleClose}

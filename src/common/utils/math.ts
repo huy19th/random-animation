@@ -8,3 +8,5 @@ export const roundAbsUp = (num: number, decimal: number) => {
     if (Math.abs(rounded) < Math.abs(num)) rounded += addition;
     return rounded;
 }
+
+export const randBetween = (min: number, max: number) => Math.random() * (max - min) + min
