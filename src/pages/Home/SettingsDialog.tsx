@@ -5,15 +5,17 @@ import { GroupSettings, Switch } from '../../common/components';
 import { useEffect, useMemo, useState } from 'react';
 import { inputType, inputValue } from '../../common/utils';
 import { Settings } from '../../common/utils/settings';
+import { z } from 'zod';
 
 export function SettingsDialog(
     { settings, updateSettings, open, handleClose, ...dialogProps }:
-        { settings: Settings<any>, updateSettings: SetState<Settings<any>>, open: boolean, handleClose: () => any } & DialogProps
+        { settings: Settings<z.Schema>, updateSettings: SetState<Settings<z.Schema>>, open: boolean, handleClose: () => any } & DialogProps
 ) {
     const [formData, updateFormData] = useState<Record<string, any>>({});
+    const [errors, setErrors] = useState<Record<string, string[]>>({});
     const currentSettings = useMemo(() => settings, [settings.name]);
     useEffect(() => updateFormData(settings.value), [settings.name]);
-    
+
     const handleChange = (e: any) => {
         const { name, value, type } = e.target;
         const [setting, subSetting] = name.split('.');
@@ -41,8 +43,18 @@ export function SettingsDialog(
     }
 
     const handleClick = () => {
-        updateSettings({ ...settings, value: formData });
-        handleClose();
+        const validationError = settings.schema.safeParse(formData).error?.errors;
+        if (validationError) {
+            setErrors(validationError.reduce((a, b) => {
+                const prop = b.path.join('.')
+                a[prop] = a[prop] ? [...a[prop], b.message] : [b.message]
+                return a
+            }, {} as Record<string, string[]>));
+        } else {
+            setErrors({});
+            updateSettings({ ...settings, value: formData });
+            handleClose();
+        }
     }
 
     if (
@@ -76,44 +88,45 @@ export function SettingsDialog(
                         else size = 4
 
                         return (
-                            <>
-                                <GroupSettings title={setting.replace('_', ' ')}>
-                                    <Grid container spacing={1} rowSpacing={1}>
-                                        {
-                                            Object.keys(formData[setting]).map((subSetting) => {
-                                                const settingValue = formData[setting][subSetting]
-                                                const fieldName = `${setting}.${subSetting}`
+                            <GroupSettings key={setting} title={setting.replace('_', ' ')}>
+                                <Grid container spacing={1} rowSpacing={1}>
+                                    {
+                                        Object.keys(formData[setting]).map((subSetting) => {
+                                            const settingValue = formData[setting][subSetting]
+                                            const fieldName = `${setting}.${subSetting}`
+                                            const err = errors[fieldName]?.join('. ')
 
-                                                return (
-                                                    <Grid size={size}>
-                                                        {
-                                                            typeof settingValue === 'boolean' ?
-                                                                <Switch
-                                                                    key={fieldName}
-                                                                    label={subSetting}
-                                                                    checked={settingValue}
-                                                                    handleClick={() => handleSwitch(fieldName)}
-                                                                />
-                                                                :
-                                                                <TextField
-                                                                    key={fieldName}
-                                                                    fullWidth
-                                                                    size='small'
-                                                                    variant='outlined'
-                                                                    type={inputType(currentSettings.value[setting][subSetting])}
-                                                                    label={subSetting}
-                                                                    name={fieldName}
-                                                                    onChange={handleChange}
-                                                                    value={`${settingValue}`[0] === '0' ? `${settingValue}`.slice(1) : settingValue}
-                                                                />
-                                                        }
-                                                    </Grid>
-                                                )
-                                            })
-                                        }
-                                    </Grid>
-                                </GroupSettings>
-                            </>
+                                            return (
+                                                <Grid key={fieldName} size={size}>
+                                                    {
+                                                        typeof settingValue === 'boolean' ?
+                                                            <Switch
+                                                                key={fieldName}
+                                                                label={subSetting}
+                                                                checked={settingValue}
+                                                                handleClick={() => handleSwitch(fieldName)}
+                                                            />
+                                                            :
+                                                            <TextField
+                                                                fullWidth
+                                                                size='small'
+                                                                variant='outlined'
+                                                                key={fieldName}
+                                                                error={Boolean(err)}
+                                                                type={inputType(currentSettings.value[setting][subSetting])}
+                                                                label={subSetting}
+                                                                name={fieldName}
+                                                                helperText={err}
+                                                                onChange={handleChange}
+                                                                value={`${settingValue}`[0] === '0' ? `${settingValue}`.slice(1) : settingValue}
+                                                            />
+                                                    }
+                                                </Grid>
+                                            )
+                                        })
+                                    }
+                                </Grid>
+                            </GroupSettings>
                         )
                     })
                 }

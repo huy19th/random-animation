@@ -7,7 +7,7 @@ const schema = z.object({
         color: z.string()
     }),
     petal: z.object({
-        count: z.number().gte(1).int()
+        count: z.number().int().gte(1).lt(100)
     })
 }).default({
     background: {

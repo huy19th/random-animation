@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { styled, FormControl, InputLabel, Box } from "@mui/material"
-import { SetState } from '../types';
 
 // Custom styled switch container that mimics the TextField outlined variant
 const OutlinedSwitchContainer = styled(FormControl)(({ theme }) => ({
