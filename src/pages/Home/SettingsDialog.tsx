@@ -3,15 +3,18 @@ import { CloseRounded } from '@mui/icons-material';
 import { SetState } from '../../common/types';
 import { GroupSettings, Switch } from '../../common/components';
 import { useEffect, useMemo, useState } from 'react';
-import { inputType, inputValue, sameKeys } from '../../common/utils';
+import { inputType, inputValue } from '../../common/utils';
+import { Settings } from '../../common/utils/settings';
+import { z } from 'zod';
 
 export function SettingsDialog(
     { settings, updateSettings, open, handleClose, ...dialogProps }:
-        { settings: Record<string, any>, updateSettings: SetState<Record<string, any>>, open: boolean, handleClose: () => any } & DialogProps
+        { settings: Settings<z.Schema>, updateSettings: SetState<Settings<z.Schema>>, open: boolean, handleClose: () => any } & DialogProps
 ) {
     const [formData, updateFormData] = useState<Record<string, any>>({});
-    const baseSettings = useMemo(() => settings, [Object.keys(settings).join()])
-    useEffect(() => updateFormData(settings), [settings])
+    const [errors, setErrors] = useState<Record<string, string[]>>({});
+    const currentSettings = useMemo(() => settings, [settings.name]);
+    useEffect(() => updateFormData(settings.value), [settings.name]);
 
     const handleChange = (e: any) => {
         const { name, value, type } = e.target;
@@ -40,9 +43,25 @@ export function SettingsDialog(
     }
 
     const handleClick = () => {
-        updateSettings(formData);
-        handleClose();
+        const validationError = settings.schema.safeParse(formData).error?.errors;
+        if (validationError) {
+            setErrors(validationError.reduce((a, b) => {
+                const prop = b.path.join('.')
+                a[prop] = a[prop] ? [...a[prop], b.message] : [b.message]
+                return a
+            }, {} as Record<string, string[]>));
+        } else {
+            setErrors({});
+            updateSettings({ ...settings, value: formData });
+            handleClose();
+        }
     }
+
+    if (
+        !formData ||
+        !settings?.value ||
+        Object.keys(settings.value).join() !== Object.keys(formData).join()
+    ) return null;
 
     return (
         <Dialog {...dialogProps} open={open} onClose={handleClose}>
@@ -60,7 +79,7 @@ export function SettingsDialog(
             <Divider />
             <DialogContent>
                 {
-                    sameKeys(formData, settings) && Object.keys(formData).map(setting => {
+                    Object.keys(formData).map(setting => {
                         const settingCount = Object.keys(formData[setting]).length;
                         let size: number
 
@@ -69,44 +88,45 @@ export function SettingsDialog(
                         else size = 4
 
                         return (
-                            <>
-                                <GroupSettings title={setting.replace('_', ' ')}>
-                                    <Grid container spacing={1} rowSpacing={1}>
-                                        {
-                                            Object.keys(formData[setting]).map((subSetting) => {
-                                                const settingValue = formData[setting][subSetting]
-                                                const fieldName = `${setting}.${subSetting}`
+                            <GroupSettings key={setting} title={setting.replace('_', ' ')}>
+                                <Grid container spacing={1} rowSpacing={1}>
+                                    {
+                                        Object.keys(formData[setting]).map((subSetting) => {
+                                            const settingValue = formData[setting][subSetting]
+                                            const fieldName = `${setting}.${subSetting}`
+                                            const err = errors[fieldName]?.join('. ')
 
-                                                return (
-                                                    <Grid size={size}>
-                                                        {
-                                                            typeof settingValue === 'boolean' ?
-                                                                <Switch
-                                                                    key={fieldName}
-                                                                    label={subSetting}
-                                                                    checked={settingValue}
-                                                                    handleClick={() => handleSwitch(fieldName)}
-                                                                />
-                                                                :
-                                                                <TextField
-                                                                    key={fieldName}
-                                                                    fullWidth
-                                                                    size='small'
-                                                                    variant='outlined'
-                                                                    type={inputType(baseSettings[setting][subSetting])}
-                                                                    label={subSetting}
-                                                                    name={fieldName}
-                                                                    onChange={handleChange}
-                                                                    value={`${settingValue}`[0] === '0' ? `${settingValue}`.slice(1) : settingValue}
-                                                                />
-                                                        }
-                                                    </Grid>
-                                                )
-                                            })
-                                        }
-                                    </Grid>
-                                </GroupSettings>
-                            </>
+                                            return (
+                                                <Grid key={fieldName} size={size}>
+                                                    {
+                                                        typeof settingValue === 'boolean' ?
+                                                            <Switch
+                                                                key={fieldName}
+                                                                label={subSetting}
+                                                                checked={settingValue}
+                                                                handleClick={() => handleSwitch(fieldName)}
+                                                            />
+                                                            :
+                                                            <TextField
+                                                                fullWidth
+                                                                size='small'
+                                                                variant='outlined'
+                                                                key={fieldName}
+                                                                error={Boolean(err)}
+                                                                type={inputType(currentSettings.value[setting][subSetting])}
+                                                                label={subSetting}
+                                                                name={fieldName}
+                                                                helperText={err}
+                                                                onChange={handleChange}
+                                                                value={`${settingValue}`[0] === '0' ? `${settingValue}`.slice(1) : settingValue}
+                                                            />
+                                                    }
+                                                </Grid>
+                                            )
+                                        })
+                                    }
+                                </Grid>
+                            </GroupSettings>
                         )
                     })
                 }

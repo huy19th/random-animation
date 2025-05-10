@@ -2,30 +2,29 @@ import { Layer, Image as Img, Rect } from 'react-konva';
 import { OutletContext } from '../../common/types';
 import { useOutletContext } from 'react-router';
 import { useEffect, useRef, useState } from 'react';
-import { sameKeys } from '../../common/utils';
 import { Petal } from './animation';
 import Sakura from './petal.png';
 import { useImage } from '../../common/hooks';
-import { CherryBlossommSettings } from './settings';
+import { CherryBlossomSettings, } from './settings';
 
 export function CherryBlossom() {
   const { windowSize, settings, updateSettings } = useOutletContext<
-    OutletContext<typeof CherryBlossommSettings>
+    OutletContext<typeof CherryBlossomSettings>
   >();
   const animationRef = useRef<number>(null);
   const petalImage = useImage(Sakura)
   const [petals, setPetals] = useState<Petal[]>([]);
 
   // initialize settings
-  useEffect(() => updateSettings(CherryBlossommSettings), []);
+  useEffect(() => updateSettings(CherryBlossomSettings), []);
 
   // Regenerate petals when petal image or count changes
   useEffect(() => {
-    if (!petalImage || !sameKeys(settings, CherryBlossommSettings)) return;
+    if (!petalImage || settings.name !== CherryBlossomSettings.name) return;
     setPetals(
-      new Array(settings.petal.count).fill(null).map(() => new Petal())
+      new Array(settings.value.petal.count).fill(null).map(() => new Petal())
     );
-  }, [petalImage, settings.petal?.count]);
+  }, [petalImage, settings.value?.petal?.count]);
 
   // Animation loop using requestAnimationFrame
   useEffect(() => {
@@ -43,14 +42,14 @@ export function CherryBlossom() {
     return () => cancelAnimationFrame(animationRef.current!);
   }, [petals.length]); // run once when petals are initialized
 
-  if (!sameKeys(settings, CherryBlossommSettings) || !petalImage) return null;
+  if (settings.name !== CherryBlossomSettings.name || !petalImage) return null;
 
   return (
     <Layer>
       <Rect
         width={windowSize.width}
         height={windowSize.height}
-        fill={settings.background.color}
+        fill={settings.value.background.color}
       />
       {petals.map((petal, index) => (
         <Img

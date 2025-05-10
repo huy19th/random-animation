@@ -1,26 +1,23 @@
 import { Circle, Layer, Text, Rect } from 'react-konva'
 import { useOutletContext } from 'react-router'
 import { OutletContext } from '../../common/types/outlet-context'
-import { sameKeys } from '../../common/utils';
 import { useEffect, useState } from 'react';
 import { ClockSettings } from './settings';
 
 export function Clock() {
-    console.log('Clock')
-    const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<ReturnType<typeof ClockSettings>>>();
+    const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<typeof ClockSettings>>();
     const [time, updateTime] = useState(new Date());
 
     const unit = Math.min(windowSize.width, windowSize.height) * (window.innerHeight < window.innerWidth ? 1 / 4 : 2 / 5);
-    const defaultSettings = ClockSettings(unit);
 
     const timeout = setTimeout(() => updateTime(new Date()), 1000);
 
     useEffect(() => {
-        updateSettings(defaultSettings)
+        updateSettings(ClockSettings)
         return () => clearTimeout(timeout)
     }, []);
 
-    if (!sameKeys(settings, defaultSettings)) return null;
+    if (settings.name !== ClockSettings.name) return null;
 
     const angle = - (time.getSeconds() + 1) * 6;
     const {
@@ -29,7 +26,7 @@ export function Clock() {
         hour_hand,
         center,
         numbers,
-    } = settings;
+    } = settings.value;
 
 
     return (

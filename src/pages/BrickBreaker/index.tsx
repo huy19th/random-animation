@@ -2,7 +2,6 @@ import { Circle, Layer, Rect } from 'react-konva';
 import { useOutletContext } from 'react-router';
 import { OutletContext } from '../../common/types';
 import { BrickBreakerSettings } from './settings';
-import { sameKeys } from '../../common/utils';
 import { BrickBreaker as Game, Brick, Ball } from './animation'
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,9 +17,9 @@ export function BrickBreaker() {
     useEffect(() => updateSettings(BrickBreakerSettings), []);
 
     useEffect(() => {
-        if (!sameKeys(settings, BrickBreakerSettings)) return;
-        setGame(new Game(settings, windowSize))
-    }, [settings])
+        if (settings.name !== BrickBreakerSettings.name) return;
+        setGame(new Game(settings.value, windowSize))
+    }, [settings.name])
 
     useEffect(() => {
         if (!game) return;
@@ -36,7 +35,7 @@ export function BrickBreaker() {
         return () => cancelAnimationFrame(animationRef.current!);
     }, [game])
 
-    if (!sameKeys(settings, BrickBreakerSettings)) return null;
+    if (settings.name !== BrickBreakerSettings.name) return null;
 
     return (
         <Layer>

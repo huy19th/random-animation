@@ -145,22 +145,22 @@ export class Ball {
 export class BrickBreaker {
 
     static Color = {
-        light: BrickBreakerSettings.color.light,
-        dark: BrickBreakerSettings.color.dark
+        light: BrickBreakerSettings.value.color.light,
+        dark: BrickBreakerSettings.value.color.dark
     }
 
     balls: Ball[] = [];
     bricks: Brick[] = [];
     windowSize: WindowSize;
 
-    constructor(settings = BrickBreakerSettings, windowSize: WindowSize) {
+    constructor(settings = BrickBreakerSettings.value, windowSize: WindowSize) {
         BrickBreaker.Color = settings.color;
         this.windowSize = windowSize;
         this.createBricks(settings);
         this.createBalls(settings);
     }
 
-    createBalls(settings: typeof BrickBreakerSettings) {
+    createBalls(settings: typeof BrickBreakerSettings.value) {
         const { color, ball } = settings;
         const marginX = window.innerWidth / 16;
         const marginY = window.innerHeight / 16;
@@ -194,7 +194,7 @@ export class BrickBreaker {
         }
     }
 
-    createBricks(settings: typeof BrickBreakerSettings) {
+    createBricks(settings: typeof BrickBreakerSettings.value) {
         const { brick: { width, height }, color } = settings;
         const totalBrickHorizontally = Math.ceil(window.innerWidth / width);
         const totalBrickVertically = Math.ceil(window.innerHeight / height);
