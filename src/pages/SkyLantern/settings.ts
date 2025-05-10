@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { Color } from '../../common/constants';
 import { Settings } from '../../common/utils/settings';
+// import { Color } from '../../common/constants';
 
 export const schema = z.object({
     background: z.object({
@@ -11,7 +11,7 @@ export const schema = z.object({
     })
 }).default({
     background: {
-        color: Color.Indigo[950]
+        color: "#3a3b68" // Color.Indigo[950] is alternative color
     },
     lantern: {
         count: 30

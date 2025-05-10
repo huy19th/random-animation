@@ -5,6 +5,7 @@ import { OutletContext } from '../../common/types';
 import { Color } from '../../common/constants';
 import { SkyLanternSettings } from './settings';
 import { Lantern } from './animation';
+import { darken } from '@mui/material';
 
 export function SkyLantern() {
     const [lanterns, setLanterns] = useState<any[]>([]);
@@ -45,9 +46,9 @@ export function SkyLantern() {
                 fillLinearGradientStartPoint={{ x: 0, y: 0 }}
                 fillLinearGradientEndPoint={{ x: 0, y: windowSize.height / 2 }}
                 fillLinearGradientColorStops={[
-                  0, "#0b0c2a",       // deep night blue
-                  0.5, "#1a1b3c",     // medium-dark indigo
-                  1, "#3a3b68",       // soft bluish-purple
+                  0, darken(settings.value.background.color, 0.4),       // deep night blue
+                  0.5, darken(settings.value.background.color, 0.2),     // medium-dark indigo
+                  1, settings.value.background.color,       // soft bluish-purple
                 ]}
             />
             {lanterns.map((lantern, index) => (

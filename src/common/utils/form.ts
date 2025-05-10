@@ -1,7 +1,9 @@
+import { HexColorRegex } from '../constants'
+
 export const inputType = (value: any): string => {
     if (typeof value === 'boolean') return 'checkbox'
     if (typeof value === 'number') return 'number'
-    if (typeof value === 'string' && /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})/.test(value)) return 'color'
+    if (typeof value === 'string' && HexColorRegex.test(value)) return 'color'
     return 'text'
 }
 
