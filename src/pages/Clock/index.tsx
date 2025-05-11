@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router'
 import { OutletContext } from '../../common/types/outlet-context'
 import { useEffect, useState } from 'react';
 import { ClockSettings } from './settings';
+import { lighten } from '@mui/material';
 
 export function Clock() {
     const { windowSize, settings, updateSettings } = useOutletContext<OutletContext<typeof ClockSettings>>();
@@ -17,20 +18,21 @@ export function Clock() {
         return () => clearTimeout(timeout)
     }, []);
 
-    if (settings.name !== ClockSettings.name) return null;
+    if (settings.name !== ClockSettings.name || !settings.constant) return null;
 
     const angle = - (time.getSeconds() + 1) * 6;
-    const {
-        second_hand,
-        minute_hand,
-        hour_hand,
-        center,
-        numbers,
-    } = settings.value;
-
+    const { clock, numbers } = settings.value;
+    const { second_hand, minute_hand, hour_hand, center } = settings.constant
 
     return (
         <>
+            <Layer>
+                <Rect
+                    width={windowSize.width}
+                    height={windowSize.height}
+                    fill={clock.background}
+                />
+            </Layer>
             <Layer
                 x={windowSize.width / 2}
                 y={windowSize.height / 2}
@@ -44,7 +46,7 @@ export function Clock() {
                     <Text
                         key={`${item}${index}`}
                         text={item}
-                        fill={numbers.color}
+                        fill={clock.color}
                         fontSize={numbers.size}
                         rotation={index * 30}
                         x={Math.sin(Math.PI / 6 * index) * (numbers.distance + numbers.size)}
@@ -61,7 +63,7 @@ export function Clock() {
                 <Rect
                     width={second_hand.width}
                     height={second_hand.height}
-                    fill={second_hand.color}
+                    fill={lighten(clock.color, 0.2)}
                     offsetX={second_hand.width / 2}
                     offsetY={unit * 180 / 200}
                 />
@@ -74,7 +76,7 @@ export function Clock() {
                 <Rect
                     width={minute_hand.width}
                     height={minute_hand.height}
-                    fill={minute_hand.color}
+                    fill={lighten(clock.color, 0.15)}
                     offsetX={minute_hand.width / 2}
                     offsetY={unit * 20 / 200}
                     rotation={time.getMinutes() * 6 + 180}
@@ -82,12 +84,12 @@ export function Clock() {
                 <Rect
                     width={hour_hand.width}
                     height={hour_hand.height}
-                    fill={hour_hand.color}
+                    fill={lighten(clock.color, 0.1)}
                     offsetX={hour_hand.width / 2}
                     offsetY={unit * 20 / 200}
                     rotation={(time.getHours() + (time.getMinutes() + 1) / 60) % 12 * 30}
                 />
-                <Circle x={0} y={0} fill={center.color} radius={center.radius} />
+                <Circle x={0} y={0} fill={lighten(clock.color, 0.05)} radius={center.radius} />
             </Layer>
         </>
     );
