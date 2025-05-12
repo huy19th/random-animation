@@ -4,6 +4,10 @@ import { Settings } from '../../common/utils/settings';
 import { validateColor, validateDecimal } from '../../common/utils';
 
 const unit = Math.min(window.innerHeight, window.innerWidth) * (window.innerHeight < window.innerWidth ? 1 / 4 : 2 / 5);
+const clockHandSchema = z.object({
+    width: z.number(),
+    height: z.number()
+})
 
 const schema = z.object({
     clock: z.object({
@@ -12,9 +16,19 @@ const schema = z.object({
         size: z.number().refine(...validateDecimal)
     }),
     numbers: z.object({
-        roman: z.boolean(),
-        size: z.number().gt(0),
-        distance: z.number().gt(0)
+        roman: z.boolean()
+    }),
+    constant: z.object({
+        second_hand: clockHandSchema,
+        minute_hand: clockHandSchema,
+        hour_hand: clockHandSchema,
+        center: z.object({
+            radius: z.number()
+        }),
+        numbers: z.object({
+            size: z.number().gt(0),
+            distance: z.number().gt(0)
+        })
     })
 }).default({
     clock: {
@@ -24,25 +38,28 @@ const schema = z.object({
     },
     numbers: {
         roman: true,
-        size: unit / 5,
-        distance: unit,
+    },
+    constant: {
+        second_hand: {
+            width: unit / 40,
+            height: unit,
+        },
+        minute_hand: {
+            width: unit / 25,
+            height: unit * 3 / 4,
+        },
+        hour_hand: {
+            width: unit / 20,
+            height: unit / 2,
+        },
+        center: {
+            radius: unit / 20,
+        },
+        numbers: {
+            size: unit / 5,
+            distance: unit,
+        }
     }
 })
 
-export const ClockSettings = new Settings('Clock', schema, {
-    second_hand: {
-        width: unit / 40,
-        height: unit,
-    },
-    minute_hand: {
-        width: unit / 25,
-        height: unit * 3 / 4,
-    },
-    hour_hand: {
-        width: unit / 20,
-        height: unit / 2,
-    },
-    center: {
-        radius: unit / 20,
-    },
-})
+export const ClockSettings = new Settings('Clock', schema)

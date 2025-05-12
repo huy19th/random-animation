@@ -52,6 +52,7 @@ export function SettingsDialog(
             }, {} as Record<string, string[]>));
         } else {
             setErrors({});
+            // @ts-ignore
             updateSettings({ ...settings, value: formData });
             handleClose();
         }
@@ -85,6 +86,7 @@ export function SettingsDialog(
             <DialogContent>
                 {
                     Object.keys(formData).map(setting => {
+                        if (setting === 'constant') return
                         const settingCount = Object.keys(formData[setting]).length;
                         let size: number
 
