@@ -39,8 +39,9 @@ export function BrickBreaker() {
 
     return (
         <Layer>
-            {bricks.map(brick =>
+            {bricks.map((brick, index) =>
                 <Rect
+                    key={index}
                     x={brick.x}
                     y={brick.y}
                     width={brick.width}
@@ -48,8 +49,9 @@ export function BrickBreaker() {
                     fill={brick.fill}
                 />
             )}
-            {balls.map(ball =>
+            {balls.map((ball, index) =>
                 <Circle
+                    key={index}
                     x={ball.x}
                     y={ball.y}
                     fill={ball.fill}
