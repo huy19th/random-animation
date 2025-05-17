@@ -1,20 +1,21 @@
 import { z } from 'zod';
 
-export class Settings<T extends z.Schema> {
+export class Settings<
+    Schema extends z.Schema,
+> {
 
     static settings = new Map<string, boolean>
 
-    name: string
-
-    schema: T
-
-    value: z.infer<T>
-
-    constructor(name: string, schema: T) {
+    constructor(
+        public name: string,
+        public schema: Schema,
+        public value: z.infer<typeof schema> = schema.parse(undefined)
+    ) {
         if (Settings.settings.has(name)) throw new Error('Duplicated setting name')
         else Settings.settings.set(name, true)
-        this.name = name
-        this.schema = schema
-        this.value = schema.parse(undefined)
+    }
+
+    get defaultValue() {
+        return this.schema.parse(undefined)
     }
 }

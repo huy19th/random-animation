@@ -24,16 +24,17 @@ export function CherryBlossom() {
     setPetals(
       new Array(settings.value.petal.count).fill(null).map(() => new Petal())
     );
-  }, [petalImage, settings.value?.petal?.count]);
+  }, [petalImage, settings]);
 
   // Animation loop using requestAnimationFrame
   useEffect(() => {
     if (petals.length === 0) return;
     const animate = () => {
-      setPetals(petals.map(petal => {
-        petal.fall();
-        return petal
-      }))
+      setPetals(petals =>
+        petals.map(petal => {
+          petal.fall()
+          return petal
+        }))
       animationRef.current = requestAnimationFrame(animate);
     };
 

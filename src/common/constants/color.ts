@@ -25,11 +25,10 @@ export const Color = {
 
 const ColorMap =
     Object.entries(Color)
-    .map(([color, variants]) => Object.entries(variants)
-        .map(([variant, code]) => [code, `${color}.${variant}`])
-    ).flat() as Array<[string, string]>
+        .map(([color, variants]) => Object.entries(variants)
+            .map(([variant, code]) => [code, `${color}.${variant}`])
+        ).flat() as Array<[string, string]>
 const cMap = new Map(ColorMap)
-
 
 export const ColorCode = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 
@@ -57,3 +56,5 @@ const ColorName = {
     Yellow: 'Yellow',
     Zinc: 'Zinc',
 };
+
+export const HexColorRegex = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})/;

@@ -52,6 +52,7 @@ export function SettingsDialog(
             }, {} as Record<string, string[]>));
         } else {
             setErrors({});
+            // @ts-ignore
             updateSettings({ ...settings, value: formData });
             handleClose();
         }
@@ -64,7 +65,12 @@ export function SettingsDialog(
     ) return null;
 
     return (
-        <Dialog {...dialogProps} open={open} onClose={handleClose}>
+        <Dialog
+            {...dialogProps}
+            maxWidth='sm'
+            open={open}
+            onClose={handleClose}
+        >
             <DialogTitle align='center'>Settings</DialogTitle>
             <IconButton
                 onClick={handleClose}
@@ -80,6 +86,7 @@ export function SettingsDialog(
             <DialogContent>
                 {
                     Object.keys(formData).map(setting => {
+                        if (setting === 'constant') return
                         const settingCount = Object.keys(formData[setting]).length;
                         let size: number
 
