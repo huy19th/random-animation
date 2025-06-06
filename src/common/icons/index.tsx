@@ -1,3 +1,3 @@
-export * from './CherryBlossom'
-export * from './BrickWall'
-export * from './SkyLantern'
+export * from './CherryBlossom';
+export * from './BrickWall';
+export * from './SkyLantern';

@@ -1,15 +1,23 @@
-import { SvgIcon, SvgIconOwnProps } from '@mui/material';
+import {SvgIcon, SvgIconOwnProps} from '@mui/material';
 
 export function CherryBlossomIcon(props: SvgIconOwnProps) {
-    return (
-        <SvgIcon {...props}>
-            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000"
-                preserveAspectRatio="xMidYMid meet">
-                <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
-                    fill="currentColor" stroke="none">
-                    <path
-                        d="M255 613 c-26 -26 -45 -77 -45 -122 l0 -40 -35 15 c-41 17 -58 17
+	return (
+		<SvgIcon {...props}>
+			<svg
+				version='1.0'
+				xmlns='http://www.w3.org/2000/svg'
+				width='64.000000pt'
+				height='64.000000pt'
+				viewBox='0 0 64.000000 64.000000'
+				preserveAspectRatio='xMidYMid meet'
+			>
+				<g
+					transform='translate(0.000000,64.000000) scale(0.100000,-0.100000)'
+					fill='currentColor'
+					stroke='none'
+				>
+					<path
+						d='M255 613 c-26 -26 -45 -77 -45 -122 l0 -40 -35 15 c-41 17 -58 17
                         -108 3 -37 -10 -39 -12 -33 -44 6 -28 3 -36 -14 -45 -11 -6 -20 -17 -20 -25 0
                         -27 52 -75 100 -92 l48 -17 -24 -29 c-27 -32 -48 -99 -39 -127 4 -14 15 -20
                         35 -20 23 0 31 -6 36 -24 3 -14 12 -27 19 -30 22 -8 99 37 120 71 11 18 22 32
@@ -39,11 +47,11 @@ export function CherryBlossomIcon(props: SvgIconOwnProps) {
                         -21 29 -36 124 -20 134 12 7 56 -60 47 -73 -3 -6 4 -20 15 -31 17 -17 24 -18
                         41 -10 27 15 21 51 -11 67 -24 12 -59 51 -60 66 0 12 22 8 66 -12z m-209 -97
                         c-9 -9 -28 6 -21 18 4 6 10 6 17 -1 6 -6 8 -13 4 -17z m204 3 c-13 -13 -26 -3
-                        -16 12 3 6 11 8 17 5 6 -4 6 -10 -1 -17z"
-                    />
-                    <path d="M400 530 c0 -5 4 -10 9 -10 6 0 13 5 16 10 3 6 -1 10 -9 10 -9 0 -16 -4 -16 -10z" />
-                </g>
-            </svg>
-        </SvgIcon>
-    )
+                        -16 12 3 6 11 8 17 5 6 -4 6 -10 -1 -17z'
+					/>
+					<path d='M400 530 c0 -5 4 -10 9 -10 6 0 13 5 16 10 3 6 -1 10 -9 10 -9 0 -16 -4 -16 -10z' />
+				</g>
+			</svg>
+		</SvgIcon>
+	);
 }
