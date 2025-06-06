@@ -1,15 +1,23 @@
-import { SvgIcon, SvgIconOwnProps } from '@mui/material';
+import {SvgIcon, SvgIconOwnProps} from '@mui/material';
 
 export function SkyLanterIcon(props: SvgIconOwnProps) {
-    return (
-        <SvgIcon {...props}>
-            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000"
-                preserveAspectRatio="xMidYMid meet">
-
-                <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
-                    fill="currentColor" stroke="none">
-                    <path d="M172 624 c-40 -21 -72 -63 -78 -106 -6 -33 40 -410 51 -428 4 -6 13
+	return (
+		<SvgIcon {...props}>
+			<svg
+				version='1.0'
+				xmlns='http://www.w3.org/2000/svg'
+				width='64.000000pt'
+				height='64.000000pt'
+				viewBox='0 0 64.000000 64.000000'
+				preserveAspectRatio='xMidYMid meet'
+			>
+				<g
+					transform='translate(0.000000,64.000000) scale(0.100000,-0.100000)'
+					fill='currentColor'
+					stroke='none'
+				>
+					<path
+						d='M172 624 c-40 -21 -72 -63 -78 -106 -6 -33 40 -410 51 -428 4 -6 13
                         -10 20 -10 30 0 84 -34 87 -54 3 -19 10 -21 68 -21 59 0 65 2 68 21 3 19 35
                         39 93 57 20 6 21 14 50 247 22 180 22 186 5 223 -34 69 -64 82 -206 85 -100 2
                         -131 -1 -158 -14z m268 -34 c28 -30 40 -67 40 -124 1 -27 2 -29 11 -12 14 22
@@ -25,10 +33,10 @@ export function SkyLanterIcon(props: SvgIconOwnProps) {
                         0 -4 -20 -12 -44z m158 -486 c0 -13 -50 -13 -70 0 -11 7 -4 10 28 10 23 0 42
                         -4 42 -10z m90 0 c-20 -13 -70 -13 -70 0 0 6 19 10 43 10 31 0 38 -3 27 -10z
                         m-30 -40 c0 -5 -22 -10 -50 -10 -27 0 -50 5 -50 10 0 6 23 10 50 10 28 0 50
-                        -4 50 -10z"
-                    />
-                </g>
-            </svg>
-        </SvgIcon>
-    )
+                        -4 50 -10z'
+					/>
+				</g>
+			</svg>
+		</SvgIcon>
+	);
 }

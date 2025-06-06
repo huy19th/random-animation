@@ -1,2 +1,2 @@
-export * from './GroupSettings'
-export * from './Switch'
+export * from './GroupSettings';
+export * from './Switch';

@@ -1,1 +1,1 @@
-export type zRefine = [(val: any) => boolean, string]
+export type zRefine = [(val: any) => boolean, string];
