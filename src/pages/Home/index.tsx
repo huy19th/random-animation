@@ -2,7 +2,7 @@ import {Box} from '@mui/material';
 import {RefObject, useLayoutEffect, useRef, useState} from 'react';
 import {Stage} from 'react-konva';
 import {Outlet} from 'react-router';
-import {useFullscreen, useToggle} from 'react-use';
+import {useFullscreen, useIdle, useToggle} from 'react-use';
 import {z} from 'zod';
 import {Settings} from '../../common/utils/settings';
 import {NavButtons} from './NavButtons';
@@ -13,6 +13,7 @@ export function Home() {
 	const ref = useRef(null) as unknown as RefObject<Element>;
 	const [show, toggle] = useToggle(false);
 	const isFullscreen = useFullscreen(ref, show, {onClose: () => toggle(false)});
+	const isIdle = useIdle(5000); // is true after 10s inacctive
 	const [isNavOpen, setOpenNav] = useState<boolean>(false);
 	const [isSettingsOpen, setOpenSettings] = useState<boolean>(false);
 	const [settings, updateSettings] = useState<Settings<z.Schema>>(
@@ -31,8 +32,9 @@ export function Home() {
 	}, []);
 
 	return (
-		<Box ref={ref} bgcolor='white'>
+		<Box ref={ref} bgcolor='white' sx={{cursor: isIdle ? 'none' : 'default'}}>
 			<NavButtons
+				isIdle={isIdle}
 				isFullScreen={isFullscreen}
 				handleFullSreen={() => toggle(!isFullscreen)}
 				handleOpenNav={() => setOpenNav(true)}
