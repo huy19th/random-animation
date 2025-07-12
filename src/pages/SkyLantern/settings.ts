@@ -16,7 +16,7 @@ export const schema = z
 			color: '#3a3b68', // Color.Indigo[950] is alternative color
 		},
 		lantern: {
-			count: 30,
+			count: 15,
 		},
 	});
 
