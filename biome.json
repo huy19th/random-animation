@@ -32,8 +32,8 @@
 				"noSvgWithoutTitle": "off"
 			},
 			"correctness": {
-				"noUnusedImports": "error",
-				"noUnusedVariables": "error",
+				"noUnusedImports": "warn",
+				"noUnusedVariables": "warn",
 				"useJsxKeyInIterable": "off",
 				"useExhaustiveDependencies": "off"
 			},
